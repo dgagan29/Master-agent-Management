@@ -1,9 +1,10 @@
 const express = require('express');
-const { getAgents, addAgent, updateAgent, deleteAgent } = require('../controllers/subAgentController'); // Make sure this matches your controller file name
+const { getAgents, getAgentById, addAgent, updateAgent, deleteAgent } = require('../controllers/subAgentController');
 
 const router = express.Router();
 
-router.get('/', getAgents); // Changed to get agents by category query parameter
+router.get('/', getAgents); // Retrieve all agents by category
+router.get('/:id', getAgentById); // Retrieve a single agent by ID
 router.post('/', addAgent);
 router.put('/:id', updateAgent);
 router.delete('/:id', deleteAgent);

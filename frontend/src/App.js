@@ -2,17 +2,21 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import SubAgentList from './components/SubAgentList';
-import Navbar from './components/Navbar'; // Import the Navbar component
+import Demo from './components/Demo';
+import InterviewScr from './components/InterviewScr';
+import Navbar from './components/Navbar';
 import './App.css';
 
 const App = () => {
   return (
     <Router>
       <div>
-        <Navbar /> {/* Add the Navbar component here */}
+        <Navbar />
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/sub-agents/:masterAgentId" element={<SubAgentList />} />
+          <Route path="/agent-demo/:agentId" element={<Demo />} /> {/* Ensure this route is defined */}
+          <Route path="/interview-scr" element={<InterviewScr />} />
         </Routes>
       </div>
     </Router>

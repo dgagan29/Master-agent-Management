@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { v4: uuidv4 } = require('uuid');
+const shortid = require('shortid');
 
 // Configuring AWS SDK with environment variables
 AWS.config.update({
@@ -30,11 +30,31 @@ const getAgents = async (req, res) => {
   }
 };
 
+// Endpoint to retrieve a single Agent by ID
+const getAgentById = async (req, res) => {
+  const { id } = req.params;
+  const params = {
+    TableName: 'Agents',
+    Key: { AgentID: id },
+  };
+  try {
+    const data = await dynamoDB.get(params).promise();
+    if (!data.Item) {
+      return res.status(404).json({ error: 'Agent not found' });
+    }
+    console.log('Retrieved agent:', data.Item);
+    res.json(data.Item);
+  } catch (error) {
+    console.error('Error getting agent:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Endpoint to add a new Agent
 const addAgent = async (req, res) => {
   const { category, role, topics, avatar } = req.body;
   const newAgent = {
-    AgentID: uuidv4(),
+    AgentID: shortid.generate(),
     Category: category,
     Role: role,
     Topics: topics,
@@ -91,4 +111,4 @@ const deleteAgent = async (req, res) => {
   }
 };
 
-module.exports = { getAgents, addAgent, updateAgent, deleteAgent };
+module.exports = { getAgents, getAgentById, addAgent, updateAgent, deleteAgent };

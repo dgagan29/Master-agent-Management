@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import SubAgentForm from './SubAgentForm';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -81,7 +81,8 @@ const SubAgentList = () => {
       {masterAgent && (
         <>
           <h2>Agents in {masterAgent.Category}</h2>
-          <p>{masterAgent.Category}</p>
+          <p><strong>Master Agent:</strong> {masterAgent.Name}</p> {/* Display Master Agent name */}
+          <p><strong>Category:</strong> {masterAgent.Category}</p> {/* Display Master Agent category */}
         </>
       )}
       <div className="instructions-and-add">
@@ -106,6 +107,9 @@ const SubAgentList = () => {
                 <p className="card-text">{agent.Topics}</p>
                 <p className="card-text"><strong>Agent ID:</strong> {agent.AgentID}</p> {/* Display AgentID */}
                 <div className="action-buttons">
+                  <Link className="btn btn-outline-primary" to={`/agent-demo/${agent.AgentID}`}>
+                    View Demo
+                  </Link>
                   <EditIcon className="icon edit-icon" onClick={() => handleEditAgent(agent)} />
                   <DeleteIcon className="icon delete-icon" onClick={() => handleDeleteAgent(agent.AgentID)} />
                 </div>

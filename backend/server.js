@@ -8,6 +8,7 @@ const cors = require('cors');
 // Import routes for master agents and sub agents
 const masterAgentRoutes = require('./routes/masterAgentRoutes');
 const subAgentRoutes = require('./routes/subAgentRoutes'); // Ensure this matches the filename
+const demoRoutes = require('./routes/demoRoutes'); // New demo routes
 
 const app = express();
 
@@ -25,6 +26,9 @@ app.use('/api/master-agents', masterAgentRoutes);
 
 // Route for handling agent related requests (previously sub agents)
 app.use('/api/agents', subAgentRoutes); // Ensure this matches the filename
+
+// Route for handling demo related requests
+app.use('/api/jobs', demoRoutes); // New demo routes
 
 // Set the port to the value in environment variable or default to 5001
 const PORT = process.env.PORT || 5001;

@@ -1,0 +1,52 @@
+/* frontend/src/styles/Demo.css */
+.demo-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.agent-info {
+  margin-bottom: 20px;
+}
+
+.demo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+#jobDescription {
+  height: 300px;
+}
+
+#hrNotes {
+  height: 150px;
+}
+
+.form-control {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-submit {
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fff;
+  background-color: #8B0000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.btn-submit:hover {
+  background-color: #a00000;
+}
