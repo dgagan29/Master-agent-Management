@@ -1,0 +1,182 @@
+.subagentlist-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; /* Add some padding to handle small screens */
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000814;
+  padding: 20px;
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.create-agent-section {
+  flex: 1;
+}
+
+.create-agent-section h2 {
+  margin-bottom: 10px;
+}
+
+.create-agent-section p {
+  margin-bottom: 20px;
+}
+
+.instructions-and-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.add-sub-agent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dotted #ccc !important; /* Dotted border */
+  cursor: pointer;
+  height: auto;
+  text-align: center;
+  max-width: 400px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.add-sub-agent .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.instructions {
+  flex: 2;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  height: auto;
+  box-sizing: border-box;
+  margin-left: 20px;
+}
+
+.agent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.agent-card {
+  flex: 0 1 calc(33.333% - 20px);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: transform 0.2s;
+  margin-top: 20px;
+}
+
+.agent-card:hover {
+  transform: scale(1.05);
+}
+
+.agent-card .card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agent-info {
+  flex: 1;
+}
+
+.agent-avatar {
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.agent-avatar img.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.edit-icon {
+  color: #007bff;
+}
+
+.delete-icon {
+  color: #dc3545;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .instructions-and-add {
+    flex-direction: column;
+  }
+
+  .add-sub-agent,
+  .instructions {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .agent-card {
+    flex: 0 1 100%; /* Make the agent cards full width on small screens */
+  }
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-btn {
+  border: none;
+  background: none;
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #007bff;
+}
+
+.page-btn:hover {
+  text-decoration: underline;
+}
+
+.page-btn.active {
+  font-weight: bold;
+}
