@@ -1,14 +1,14 @@
-// Load environment variables from .env file
+// backend/server.js
 require('dotenv').config();
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// Import routes for master agents and sub agents
+// Import routes for master agents, sub agents, demo, and interview
 const masterAgentRoutes = require('./routes/masterAgentRoutes');
-const subAgentRoutes = require('./routes/subAgentRoutes'); // Ensure this matches the filename
+const subAgentRoutes = require('./routes/subAgentRoutes');
 const demoRoutes = require('./routes/demoRoutes'); // New demo routes
+const interviewRoutes = require('./routes/interviewRoutes'); // New interview routes
 
 const app = express();
 
@@ -25,10 +25,13 @@ app.use(cors({
 app.use('/api/master-agents', masterAgentRoutes);
 
 // Route for handling agent related requests (previously sub agents)
-app.use('/api/agents', subAgentRoutes); // Ensure this matches the filename
+app.use('/api/agents', subAgentRoutes);
 
 // Route for handling demo related requests
-app.use('/api/jobs', demoRoutes); // New demo routes
+app.use('/api/jobs', demoRoutes);
+
+// Route for handling interview related requests
+app.use('/api/interview', interviewRoutes); // New interview routes
 
 // Set the port to the value in environment variable or default to 5001
 const PORT = process.env.PORT || 5001;

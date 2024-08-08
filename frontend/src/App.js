@@ -1,3 +1,4 @@
+// frontend/src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
@@ -15,8 +16,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/sub-agents/:masterAgentId" element={<SubAgentList />} />
-          <Route path="/agent-demo/:agentId" element={<Demo />} /> {/* Ensure this route is defined */}
-          <Route path="/interview-scr" element={<InterviewScr />} />
+          <Route path="/agent-demo/:agentId" element={<Demo />} />
+          <Route path="/interview" element={<InterviewScr />} />
         </Routes>
       </div>
     </Router>

@@ -1,3 +1,4 @@
+// backend/controllers/demoController.js
 const AWS = require('aws-sdk');
 const shortid = require('shortid');
 
@@ -14,23 +15,32 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 // Endpoint to add a new Job
 const addJob = async (req, res) => {
-  const { agentId, hrNotes, jobDescription } = req.body;
+  // Destructure the request body to get the necessary fields
+  const { agentId, hrNotes, jobDescription, jobId } = req.body;
+  
+  // Construct the new job object
   const newJob = {
-    JobID: shortid.generate(),
+    JobID: jobId, // Use the job ID provided in the request (ensure it's a string)
     AgentID: agentId,
     HRNotes: hrNotes,
     JobDescription: jobDescription,
   };
 
+  // Define the parameters for the DynamoDB put operation
   const params = {
     TableName: 'Jobs',
     Item: newJob,
   };
+  
   try {
+    // Attempt to add the new job to the DynamoDB table
     await dynamoDB.put(params).promise();
     console.log('Added job:', newJob);
+    
+    // Respond with a success message
     res.json({ message: 'Job added' });
   } catch (error) {
+    // Log and respond with an error message if something goes wrong
     console.error('Error adding job:', error);
     res.status(500).json({ error: error.message });
   }
