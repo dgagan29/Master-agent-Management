@@ -1,32 +1,31 @@
-// frontend/src/components/InterviewScr.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import shortid from 'shortid';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import '../styles/InterviewScr.css';
 
 const InterviewScr = () => {
   const [message, setMessage] = useState('');
   const [responses, setResponses] = useState([]);
-  const sessionId = shortid.generate();
+  const [sessionId, setSessionId] = useState('');
   const sessionType = 5;
-  
-  // Comment out manually assigning a job ID for testing
-  // const [jobId, setJobId] = useState('2');
   const [jobId, setJobId] = useState('');
-  
-  // const [agentRole, setAgentRole] = useState('');
-  // const [agentTopic, setAgentTopic] = useState('');
-  // const [jd, setJd] = useState('');
-  // const [notes, setNotes] = useState('');
+  const [isCompleted, setIsCompleted] = useState(false); // State to track if the interview is completed
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     // Fetch job details from localStorage
     const jobDetails = JSON.parse(localStorage.getItem('jobDetails')) || {};
     setJobId(jobDetails.jobId || '');
-    // setAgentRole(jobDetails.agentRole || '');
-    // setAgentTopic(jobDetails.agentTopic || '');
-    // setJd(jobDetails.jd || '');
-    // setNotes(jobDetails.notes || '');
+
+    // Check if a session ID exists in local storage
+    let storedSessionId = localStorage.getItem('sessionId');
+    if (!storedSessionId) {
+      // If no session ID exists, generate a new one and store it
+      storedSessionId = shortid.generate();
+      localStorage.setItem('sessionId', storedSessionId);
+    }
+    setSessionId(storedSessionId);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -34,22 +33,33 @@ const InterviewScr = () => {
     const payload = {
       session_id: sessionId,
       session_type: sessionType,
-      job_id: jobId, // Use the job ID retrieved from localStorage
+      job_id: jobId,
       message: message,
-      agent_role: "",  // Keeping other fields as empty strings
-      agent_topic: "", // Keeping other fields as empty strings
-      jd: "",          // Keeping other fields as empty strings
-      notes: ""        // Keeping other fields as empty strings
     };
 
-    console.log('Sending payload:', payload); // Log the payload being sent
+    console.log('Sending payload:', payload);
 
     try {
       const response = await axios.post('http://localhost:5001/api/interview/interact', payload);
       setResponses([...responses, { message: message, response: response.data }]);
       setMessage('');
+
+      if (response.data.interview_status === 'completed') {
+        setIsCompleted(true);
+        localStorage.removeItem('sessionId');
+        showCompletionPopup(); // Call the function to show the popup and navigate
+      }
     } catch (error) {
       console.error('Error sending message:', error);
+    }
+  };
+
+  const showCompletionPopup = () => {
+    const continueInterview = window.confirm('The interview is completed. Do you want to start another interview?');
+    if (continueInterview) {
+      navigate('/'); // Navigate to the Dashboard.js (home page)
+    } else {
+      navigate('/'); // Navigate to the Dashboard.js (home page)
     }
   };
 
@@ -72,8 +82,15 @@ const InterviewScr = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message here"
+            disabled={isCompleted} // Disable the textarea if the interview is completed
           ></textarea>
-          <button type="submit" className="btn btn-primary mt-3">Send</button>
+          <button
+            type="submit"
+            className="btn btn-primary mt-3"
+            disabled={isCompleted} // Disable the button if the interview is completed
+          >
+            Send
+          </button>
         </form>
       </div>
     </div>
