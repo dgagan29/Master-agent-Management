@@ -9,18 +9,21 @@ import { Modal } from 'react-bootstrap';
 import '../styles/SubAgentList.css';
 
 const SubAgentList = () => {
-  const { masterAgentId } = useParams(); // Retrieve masterAgentId from URL parameters
+  // Get the masterAgentId from the URL parameters
+  const { masterAgentId } = useParams();
+  // useState hook is used to manage the state of sub-agents, master agent details, form visibility, and the agent being edited
   const [agents, setAgents] = useState([]);
   const [masterAgent, setMasterAgent] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editAgent, setEditAgent] = useState(null);
 
-  // Load agents associated with the master agent's category
+  // Function to load sub-agents associated with the master agent's category
   const loadAgents = useCallback(async () => {
     try {
       if (masterAgent) {
+        // Fetch the agents based on the master agent's category
         const result = await axios.get(`http://localhost:5001/api/agents?category=${masterAgent.Category}`);
-        setAgents(result.data);
+        setAgents(result.data); // Set the fetched agents into state
         console.log('Loaded agents:', result.data);
       }
     } catch (error) {
@@ -28,56 +31,60 @@ const SubAgentList = () => {
     }
   }, [masterAgent]);
 
-  // Load master agent details
+  // Function to load master agent details
   const loadMasterAgent = useCallback(async () => {
     try {
+      // Fetch the master agent based on masterAgentId
       const result = await axios.get(`http://localhost:5001/api/master-agents/${masterAgentId}`);
-      setMasterAgent(result.data);
+      setMasterAgent(result.data); // Set the fetched master agent details into state
       console.log('Loaded master agent:', result.data);
     } catch (error) {
       console.error('Error loading master agent:', error);
     }
   }, [masterAgentId]);
 
-  // Close the form modal and reload agents
+  // Function to close the form modal and reload agents
   const handleCloseForm = () => {
-    setShowForm(false);
-    loadAgents();
+    setShowForm(false); // Hide the form
+    loadAgents(); // Reload the list of sub-agents
   };
 
-  // Delete an agent by its ID
+  // Function to delete a sub-agent by its ID
   const handleDeleteAgent = async (id) => {
     try {
       await axios.delete(`http://localhost:5001/api/agents/${id}`);
-      loadAgents();
+      loadAgents(); // Reload the list after deletion
       console.log('Deleted agent with ID:', id);
     } catch (error) {
       console.error('Error deleting agent:', error);
     }
   };
 
-  // Edit an agent
+  // Function to edit a sub-agent
   const handleEditAgent = (agent) => {
-    setEditAgent(agent);
-    setShowForm(true);
+    setEditAgent(agent); // Set the agent being edited
+    setShowForm(true); // Show the form modal
   };
 
-  // Add an agent
+  // Function to add a new sub-agent
   const handleAddAgent = () => {
-    setEditAgent(null);
-    setShowForm(true);
+    setEditAgent(null); // No agent is being edited, so set editAgent to null
+    setShowForm(true); // Show the form modal
   };
 
+  // useEffect hook to load the master agent details when the component first renders or when masterAgentId changes
   useEffect(() => {
     loadMasterAgent();
   }, [loadMasterAgent]);
 
+  // useEffect hook to load the agents when the master agent details are loaded or when the list of agents changes
   useEffect(() => {
     loadAgents();
   }, [loadAgents]);
 
   return (
     <div className="container mt-3">
+      {/* Display master agent details if available */}
       {masterAgent && (
         <>
           <h2>Agents in {masterAgent.Category}</h2>
@@ -86,6 +93,7 @@ const SubAgentList = () => {
         </>
       )}
       <div className="instructions-and-add">
+        {/* Button to show the form for adding a new sub-agent */}
         <div className="agent-card add-agent" onClick={handleAddAgent}>
           <div className="card-body">
             <AddIcon className="icon" />
@@ -99,6 +107,7 @@ const SubAgentList = () => {
         </div>
       </div>
       <div className="row mt-3">
+        {/* Display the list of agents associated with the master agent */}
         {agents.map(agent => (
           <div key={agent.AgentID} className="col-md-4 mb-3">
             <div className="card">
@@ -107,9 +116,11 @@ const SubAgentList = () => {
                 <p className="card-text">{agent.Topics}</p>
                 <p className="card-text"><strong>Agent ID:</strong> {agent.AgentID}</p> {/* Display AgentID */}
                 <div className="action-buttons">
+                  {/* Link to view a demo for the selected agent */}
                   <Link className="btn btn-outline-primary" to={`/agent-demo/${agent.AgentID}`}>
                     View Demo
                   </Link>
+                  {/* Edit and Delete icons with their respective handlers */}
                   <EditIcon className="icon edit-icon" onClick={() => handleEditAgent(agent)} />
                   <DeleteIcon className="icon delete-icon" onClick={() => handleDeleteAgent(agent.AgentID)} />
                 </div>
@@ -119,12 +130,13 @@ const SubAgentList = () => {
         ))}
       </div>
 
-      {/* Modal for adding/editing Agent */}
+      {/* Modal for adding/editing a Sub-Agent */}
       <Modal show={showForm} onHide={handleCloseForm}>
         <Modal.Header closeButton>
           <Modal.Title>{editAgent ? 'Edit Agent' : 'Add Agent'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {/* The SubAgentForm is displayed inside the modal for adding or editing a sub-agent */}
           <SubAgentForm masterAgent={masterAgent} onAdd={handleCloseForm} editAgent={editAgent} />
         </Modal.Body>
       </Modal>

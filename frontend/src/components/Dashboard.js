@@ -9,37 +9,43 @@ import AddIcon from '@mui/icons-material/AddOutlined';
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
+  // useState hook is used to manage the state of master agents, form visibility, and the agent being edited
   const [masterAgents, setMasterAgents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editAgent, setEditAgent] = useState(null);
 
+  // useEffect hook to load the master agents when the component first renders
   useEffect(() => {
     loadMasterAgents();
   }, []);
 
+  // Function to fetch master agents from the server using axios
   const loadMasterAgents = async () => {
     try {
       const result = await axios.get('http://localhost:5001/api/master-agents');
-      setMasterAgents(result.data.Items || []); // Ensure it's an array
+      setMasterAgents(result.data.Items || []); // Set the fetched agents into state
     } catch (error) {
       console.error('Error loading master agents:', error);
     }
   };
 
+  // Function to show the form modal, optionally with an agent to edit
   const handleShowForm = (agent = null) => {
-    setEditAgent(agent);
-    setShowForm(true);
+    setEditAgent(agent); // Set the agent being edited, if any
+    setShowForm(true); // Show the form
   };
 
+  // Function to close the form modal and reload the agents
   const handleCloseForm = () => {
-    setShowForm(false);
-    loadMasterAgents();
+    setShowForm(false); // Hide the form
+    loadMasterAgents(); // Reload the list of agents
   };
 
+  // Function to delete an agent by its ID
   const handleDeleteAgent = async (id) => {
     try {
       await axios.delete(`http://localhost:5001/api/master-agents/${id}`);
-      loadMasterAgents();
+      loadMasterAgents(); // Reload the list after deletion
     } catch (error) {
       console.error('Error deleting master agent:', error);
     }
@@ -56,6 +62,7 @@ const Dashboard = () => {
       <div className="main-section">
         <h1>Dashboard</h1>
         <div className="instructions-and-add">
+          {/* Button to show the form for adding a new master agent */}
           <div className="agent-card add-master-agent" onClick={() => handleShowForm()}>
             <div className="card-body">
               <AddIcon className="icon" />
@@ -83,9 +90,11 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="action-buttons">
+                    {/* Link to view sub-agents associated with this master agent */}
                     <Link className="btn btn-outline-primary" to={`/sub-agents/${agent.MasterAgentId}`}>
                       View Agents
                     </Link>
+                    {/* Edit and Delete icons with their respective handlers */}
                     <EditIcon className="icon edit-icon" onClick={() => handleShowForm(agent)} />
                     <DeleteIcon className="icon delete-icon" onClick={() => handleDeleteAgent(agent.MasterAgentId)} />
                   </div>
@@ -104,6 +113,7 @@ const Dashboard = () => {
           <Modal.Title>{editAgent ? 'Edit Master Agent' : 'Add Master Agent'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {/* The MasterAgentForm is displayed inside the modal for adding or editing an agent */}
           <MasterAgentForm onAdd={handleCloseForm} agent={editAgent} formType={editAgent ? 'Edit' : 'Add'} />
         </Modal.Body>
       </Modal>

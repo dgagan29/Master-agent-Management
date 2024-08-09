@@ -36,12 +36,14 @@
 }
 
 .user-message {
-  background-color: #e0f7fa;
+  background-color: #e0e0e0; /* Light grey for sent messages */
+  color: #333; /* Dark text color for contrast */
   align-self: flex-end;
 }
 
 .bot-response {
-  background-color: #e1bee7;
+  background-color: #f5f5f5; /* Slightly darker grey for received messages */
+  color: #333; /* Dark text color for contrast */
 }
 
 .message-form {
@@ -53,8 +55,36 @@
 .message-form textarea {
   resize: none;
   height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .message-form button {
   align-self: flex-end;
+  background-color: #000; /* Black button */
+  color: #fff; /* White text on the button */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.message-form button:disabled {
+  background-color: #666; /* Dark grey for disabled state */
+  cursor: not-allowed;
+}
+
+/* Modal styling can be added or customized as needed */
+.modal-header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-footer {
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+}
+
+.modal-title {
+  font-weight: bold;
 }
